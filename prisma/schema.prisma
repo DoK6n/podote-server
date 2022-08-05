@@ -11,27 +11,33 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  email     String   @unique
+  id        String  @id @default(uuid())
+  email     String  @unique
   name      String
   todos     Todo[]
-  SnsType   SnsType @relation(fields: [snsTypeId], references: [id])
-  snsTypeId Int
+  snsType   SnsType @relation(fields: [snsTypeId], references: [id])
+  snsTypeId Int     @map("sns_type_id")
+
+  @@map("user")
 }
 
 model SnsType {
   id   Int    @id @default(autoincrement())
   name String
-  User User[]
+  user User[]
+
+  @@map("sns_type")
 }
 
 model Todo {
   id        String   @id @default(uuid())
   content   Json?
   done      Boolean  @default(false)
-  User      User    @relation(fields: [userId], references: [id])
-  userId    String
-  createdDt DateTime @default(now())
-  updatedDt DateTime @updatedAt
-  removedDt DateTime
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @map("user_id")
+  createdDt DateTime @default(now()) @map("created_dt")
+  updatedDt DateTime @updatedAt @map("updated_dt")
+  removedDt DateTime @map("removed_dt")
+
+  @@map("todo")
 }
