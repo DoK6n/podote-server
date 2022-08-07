@@ -11,12 +11,14 @@ datasource db {
 }
 
 model User {
-  id        String  @id @default(uuid())
-  email     String  @unique
+  id        String    @id @default(uuid())
+  email     String    @unique
   name      String
   todos     Todo[]
-  snsType   SnsType @relation(fields: [snsTypeId], references: [id])
-  snsTypeId Int     @map("sns_type_id")
+  snsType   SnsType   @relation(fields: [snsTypeId], references: [id])
+  snsTypeId Int       @map("sns_type_id")
+  createdDt DateTime  @default(now()) @map("created_dt")
+  updatedDt DateTime? @updatedAt @map("updated_dt")
 
   @@map("user")
 }
@@ -30,14 +32,15 @@ model SnsType {
 }
 
 model Todo {
-  id        String   @id @default(uuid())
-  content   Json?
-  done      Boolean  @default(false)
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String   @map("user_id")
-  createdDt DateTime @default(now()) @map("created_dt")
-  updatedDt DateTime @updatedAt @map("updated_dt")
-  removedDt DateTime @map("removed_dt")
+  id         String    @id @default(uuid())
+  content    Json?
+  isInactive Boolean   @default(false) @map("is_inactive")
+  isRemoved  Boolean   @default(false) @map("is_removed")
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String    @map("user_id")
+  createdDt  DateTime  @default(now()) @map("created_dt")
+  updatedDt  DateTime? @updatedAt @map("updated_dt")
+  removedDt  DateTime? @map("removed_dt")
 
   @@map("todo")
 }
