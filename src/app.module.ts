@@ -6,6 +6,7 @@ import { join } from 'path';
 import { PrismaModule } from './prisma/prisma.module';
 import { TodosModule } from './todos/todos.module';
 import { UsersModule } from './users/users.module';
+import { SnsTypeModule } from './sns-type/sns-type.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { UsersModule } from './users/users.module';
     PrismaModule,
     TodosModule,
     UsersModule,
+    SnsTypeModule,
   ],
   controllers: [],
   providers: [],
