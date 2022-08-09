@@ -1,21 +1,28 @@
+import { Logger } from '@nestjs/common';
 import { Args, Query, Resolver } from '@nestjs/graphql';
+import { SnsTypeService } from '../sns-type/sns-type.service';
 import { RetrieveUserInput } from './dto';
-import { User } from './models';
+import { User, UserWithSnsType } from './models';
 import { UsersService } from './users.service';
 
-@Resolver(User)
+@Resolver(() => User)
 export class UsersResolver {
-  constructor(private readonly usersService: UsersService) {}
+  private readonly logger = new Logger(UsersResolver.name);
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly snsTypeService: SnsTypeService,
+  ) {}
 
   @Query(() => [User], { nullable: true })
   async retrieveAllUsers() {
     return this.usersService.findAllUsers();
   }
 
-  @Query(() => [User], { nullable: true })
-  async retrieveUserById(
-    @Args('retrieveUserInput') retrieveUserInput: RetrieveUserInput,
-  ) {
-    return this.usersService.findUserByUid(retrieveUserInput.id);
+  @Query(() => UserWithSnsType)
+  async retrieveUserById(@Args('data') data: RetrieveUserInput) {
+    const user = await this.usersService.findUserByUid(data.id);
+    const snsType = await this.snsTypeService.findOneSNSType(user.snsTypeId);
+
+    return { ...user, snsType: snsType.name };
   }
 }
