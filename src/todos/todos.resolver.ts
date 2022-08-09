@@ -4,7 +4,7 @@ import { CreateTodoInput } from './dto';
 import { Todo } from './models';
 import { TodosService } from './todos.service';
 
-@Resolver(Todo)
+@Resolver(() => Todo)
 export class TodosResolver {
   constructor(
     private readonly todoService: TodosService,
@@ -17,12 +17,15 @@ export class TodosResolver {
   }
 
   @Query(() => [Todo], { nullable: true })
-  async retrieveAllTodos(@Args('uid') uid: string) {
+  async retrieveAllTodos(@Args('uid', { type: () => String }) uid: string) {
     return this.todoService.findAllTodosByUser(uid);
   }
 
   @Query(() => Todo, { nullable: true })
-  async retrieveTodo(@Args('id') id: string, @Args('uid') uid: string) {
+  async retrieveTodo(
+    @Args('id', { type: () => String }) id: string,
+    @Args('uid', { type: () => String }) uid: string,
+  ) {
     return this.todoService.findOneTodoById(id, uid);
   }
 
