@@ -1,5 +1,11 @@
-import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
+import {
+  INestApplication,
+  Injectable,
+  Logger,
+  OnModuleInit,
+} from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
+import { createPrismaQueryEventHandler } from 'prisma-query-log';
 
 /**
  * NestJS 애플리케이션을 설정할 때 서비스 내의 데이터베이스 쿼리를 위해 Prisma Client API를 추상화하고 싶을 것입니다.
@@ -13,12 +19,38 @@ import { PrismaClient } from '@prisma/client';
  */
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
+  private readonly logger = new Logger(PrismaService.name);
+  constructor() {
+    super({
+      log: [
+        { emit: 'event', level: 'query' },
+        { emit: 'stdout', level: 'info' },
+        { emit: 'stdout', level: 'warn' },
+        { emit: 'stdout', level: 'error' },
+      ],
+      errorFormat: 'minimal',
+    });
+
+    this.$on<any>(
+      'query',
+      createPrismaQueryEventHandler({
+        logger: (query) => {
+          this.logger.verbose(query);
+        },
+        format: false,
+        colorQuery: '\u001B[96m',
+        colorParameter: '\u001B[90m',
+      }),
+    );
+  }
+
   async onModuleInit() {
     await this.$connect();
   }
 
   async enableShutdownHooks(app: INestApplication) {
-    this.$on('beforeExit', async () => {
+    this.$on('beforeExit', async (event) => {
+      this.logger.log(event.name);
       await app.close();
     });
   }
