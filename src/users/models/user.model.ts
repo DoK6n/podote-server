@@ -16,3 +16,9 @@ export class User {
   @Field(() => Number)
   snsTypeId: number;
 }
+
+@ObjectType()
+export class UserWithSnsType extends User {
+  @Field(() => String)
+  snsType: string;
+}
