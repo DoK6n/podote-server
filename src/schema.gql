@@ -2,11 +2,24 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type SnsType {
+  id: Int!
+  name: String!
+}
+
 type User {
   id: String!
   email: String!
   name: String!
   snsTypeId: Float!
+}
+
+type UserWithSnsType {
+  id: String!
+  email: String!
+  name: String!
+  snsTypeId: Float!
+  snsType: String!
 }
 
 type Todo {
@@ -35,7 +48,8 @@ type Query {
   retrieveAllTodos(uid: String!): [Todo!]
   retrieveTodo(id: String!, uid: String!): Todo
   retrieveAllUsers: [User!]
-  retrieveUserById(retrieveUserInput: RetrieveUserInput!): [User!]
+  retrieveUserById(data: RetrieveUserInput!): UserWithSnsType!
+  snsType(id: Int!): SnsType!
 }
 
 input RetrieveUserInput {
