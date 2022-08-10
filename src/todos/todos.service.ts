@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { find } from 'rxjs';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTodoInput } from './dto';
 
@@ -44,9 +45,12 @@ export class TodosService {
   //   return {};
   // }
 
-  // async removeOneTodoById() {
-  //   return {};
-  // }
+  async removeOneTodoById(id: string, uid: string) {
+    await this.prisma
+      .$queryRaw`UPDATE todo SET is_removed = true, removed_dt = now() WHERE id = ${id} AND user_id = ${uid}`;
+
+    return await this.findOneTodoById(id, uid);
+  }
 
   // async recycleOneRemovedTodoById() {
   //   return {};
