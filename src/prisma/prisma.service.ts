@@ -19,7 +19,7 @@ import { createPrismaQueryEventHandler } from 'prisma-query-log';
  */
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
-  private readonly logger = new Logger(PrismaService.name);
+  private readonly logger = new Logger('Query');
   constructor() {
     super({
       log: [
@@ -49,8 +49,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
   }
 
   async enableShutdownHooks(app: INestApplication) {
-    this.$on('beforeExit', async (event) => {
-      this.logger.log(event.name);
+    this.$on('beforeExit', async () => {
       await app.close();
     });
   }
