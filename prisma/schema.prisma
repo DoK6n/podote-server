@@ -39,7 +39,7 @@ model Todo {
   user       User      @relation(fields: [userId], references: [id])
   userId     String    @map("user_id")
   createdDt  DateTime  @default(now()) @map("created_dt")
-  updatedDt  DateTime? @map("updated_dt")
+  updatedDt  DateTime? @updatedAt @map("updated_dt")
   removedDt  DateTime? @map("removed_dt")
 
   @@map("todo")
