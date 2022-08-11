@@ -32,7 +32,7 @@ export class TodosService {
   async findOneTodoById(id: string, uid: string) {
     return await this.prisma.todo.findFirst({
       where: {
-        AND: [{ id: id }, { userId: uid }],
+        AND: [{ id: id }, { userId: uid }, { isRemoved: false }],
       },
     });
   }
