@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { find } from 'rxjs';
+import { Todo } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateTodoInput } from './dto';
 
@@ -45,9 +45,20 @@ export class TodosService {
   //   return {};
   // }
 
+  /**
+   * $queryRaw와 함께 동적 테이블 이름을 사용할 수 없습니다. 대신 다음과 같이 $queryRawUnsafe를 사용해야 합니다.
+   * ```js
+    let userTable = 'User'
+    let result = await prisma.$queryRawUnsafe(`SELECT * FROM ${userTable}`)
+   * ```
+   * $queryRawUnsafe를 사용자 입력과 함께 사용하면 SQL 주입 공격의 위험이 있습니다.
+   * > SQL 인젝션 공격은 기밀이거나 민감한 데이터를 수정하거나 파괴할 수 있는 데이터를 노출할 수 있습니다.
+    대신 $queryRaw 쿼리를 사용하는 것이 좋습니다. SQL 인젝션 공격에 대한 자세한 내용은 [OWASP SQL 인젝션 가이드](https://owasp.org/www-community/attacks/SQL_Injection)를 참조하세요.
+   * 
+   */
   async removeOneTodoById(id: string, uid: string) {
     await this.prisma
-      .$queryRaw`UPDATE todo SET is_removed = true, removed_dt = now() WHERE id = ${id} AND user_id = ${uid}`;
+      .$queryRaw<Todo>`UPDATE todo SET is_removed = true, removed_dt = now() WHERE id = ${id} AND user_id = ${uid}`;
 
     return await this.findOneTodoById(id, uid);
   }
