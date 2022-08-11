@@ -72,7 +72,7 @@ export class TodosService {
     await this.prisma
       .$queryRaw<Todo>`UPDATE todo SET is_removed = true, removed_dt = now() WHERE id = ${id} AND user_id = ${uid}`;
 
-    return await this.findOneTodoById(id, uid);
+    return await this.findOneRemovedTodo(id, uid);
   }
 
   async recycleOneRemovedTodoById(id: string, uid: string) {
