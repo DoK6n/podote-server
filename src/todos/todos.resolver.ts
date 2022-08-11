@@ -57,10 +57,13 @@ export class TodosResolver {
     return this.todoService.removeOneTodoById(id, uid);
   }
 
-  // @Query(() => [Todo], { nullable: true })
-  // async recycleRemovedTodo() {
-  //   return this.todoService.recycleOneRemovedTodoById();
-  // }
+  @Mutation(() => Todo, { nullable: true })
+  async recycleRemovedTodo(
+    @Args('id', { type: () => String }) id: string,
+    @Args('uid', { type: () => String }) uid: string,
+  ) {
+    return this.todoService.recycleOneRemovedTodoById(id, uid);
+  }
 
   // @Query(() => [Todo], { nullable: true })
   // async deleteTodo() {
