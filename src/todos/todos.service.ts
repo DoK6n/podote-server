@@ -38,7 +38,7 @@ export class TodosService {
   }
 
   async findOneRemovedTodo(id: string, uid: string) {
-    return await this.prisma.todo.findMany({
+    return await this.prisma.todo.findFirst({
       where: {
         AND: [{ id: id }, { userId: uid }, { isRemoved: true }],
       },
