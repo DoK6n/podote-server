@@ -29,7 +29,7 @@ export class TodosResolver {
     return this.todoService.findOneTodoById(id, uid);
   }
 
-  @Query(() => [Todo], { nullable: true })
+  @Query(() => Todo, { nullable: true })
   async retrieveRemovedTodo(
     @Args('id', { type: () => String }) id: string,
     @Args('uid', { type: () => String }) uid: string,
