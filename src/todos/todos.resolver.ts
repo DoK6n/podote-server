@@ -29,10 +29,20 @@ export class TodosResolver {
     return this.todoService.findOneTodoById(id, uid);
   }
 
-  // @Query(() => [Todo], { nullable: true })
-  // async retrieveRemovedTodo() {
-  //   return this.todoService.findOneRemovedTodoByIsRemoved();
-  // }
+  @Query(() => [Todo], { nullable: true })
+  async retrieveRemovedTodo(
+    @Args('id', { type: () => String }) id: string,
+    @Args('uid', { type: () => String }) uid: string,
+  ) {
+    return this.todoService.findOneRemovedTodo(id, uid);
+  }
+
+  @Query(() => [Todo], { nullable: true })
+  async retrieveAllRemovedTodo(
+    @Args('uid', { type: () => String }) uid: string,
+  ) {
+    return this.todoService.findAllRemovedTodos(uid);
+  }
 
   // @Query(() => [Todo], { nullable: true })
   // async editTodo() {

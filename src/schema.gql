@@ -47,6 +47,8 @@ scalar DateTime
 type Query {
   retrieveAllTodos(uid: String!): [Todo!]
   retrieveTodo(id: String!, uid: String!): Todo
+  retrieveRemovedTodo(id: String!, uid: String!): [Todo!]
+  retrieveAllRemovedTodo(uid: String!): [Todo!]
   retrieveAllUsers: [User!]
   retrieveUserById(data: RetrieveUserInput!): UserWithSnsType!
   snsType(id: Int!): SnsType!

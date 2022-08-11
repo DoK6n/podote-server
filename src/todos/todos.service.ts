@@ -37,9 +37,21 @@ export class TodosService {
     });
   }
 
-  // async findOneRemovedTodoByIsRemoved() {
-  //   return {};
-  // }
+  async findOneRemovedTodo(id: string, uid: string) {
+    return await this.prisma.todo.findMany({
+      where: {
+        AND: [{ id: id }, { userId: uid }, { isRemoved: true }],
+      },
+    });
+  }
+
+  async findAllRemovedTodos(uid: string) {
+    return await this.prisma.todo.findMany({
+      where: {
+        AND: [{ userId: uid }, { isRemoved: true }],
+      },
+    });
+  }
 
   // async updateOneTodoById() {
   //   return {};
