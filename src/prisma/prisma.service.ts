@@ -4,7 +4,7 @@ import {
   Logger,
   OnModuleInit,
 } from '@nestjs/common';
-import { Prisma, PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client';
 import { createPrismaQueryEventHandler } from 'prisma-query-log';
 
 /**
@@ -31,18 +31,18 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
       errorFormat: 'minimal',
     });
 
-    this.$on<any>('query', (event: Prisma.QueryEvent) => {
-      const { duration } = event;
-      const log = createPrismaQueryEventHandler({
+    this.$on<any>(
+      'query',
+      createPrismaQueryEventHandler({
         logger: (query) => {
-          this.logger.verbose(`${query} \u001B[33m+${duration}ms\u001B[0m`);
+          this.logger.verbose(query);
         },
         format: false,
+        queryDuration: true,
         colorQuery: '\u001B[96m',
         colorParameter: '\u001B[90m',
-      });
-      log(event as Prisma.QueryEvent);
-    });
+      }),
+    );
   }
 
   async onModuleInit() {
