@@ -62,6 +62,7 @@ type Mutation {
   addNewTodo(data: CreateTodoInput!): Todo
   removeTodo(id: String!, uid: String!): Todo
   recycleRemovedTodo(id: String!, uid: String!): Todo
+  deleteRemovedTodo(id: String!, uid: String!): Todo
 }
 
 input CreateTodoInput {
