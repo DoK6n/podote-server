@@ -88,7 +88,13 @@ export class TodosService {
     return await this.findAllRemovedTodos(uid);
   }
 
-  // async deleteAllRemovedTodos() {
-  //   return {};
-  // }
+  async deleteAllRemovedTodos(uid: string) {
+    await this.prisma.todo.deleteMany({
+      where: {
+        userId: uid,
+        isRemoved: true,
+      },
+    });
+    return await this.findAllRemovedTodos(uid);
+  }
 }
