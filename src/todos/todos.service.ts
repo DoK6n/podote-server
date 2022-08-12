@@ -82,13 +82,11 @@ export class TodosService {
     return await this.findOneTodoById(id, uid);
   }
 
-  // async recycleOneRemovedTodoById() {
-  //   return {};
-  // }
-
-  // async deleteOneRemoveTodoById() {
-  //   return {};
-  // }
+  async deleteOneRemovedTodoById(id: string, uid: string) {
+    await this.prisma
+      .$queryRaw<Todo>`DELETE FROM todo WHERE id = ${id} AND user_id = ${uid} AND is_removed = true`;
+    return await this.findAllRemovedTodos(uid);
+  }
 
   // async deleteAllRemovedTodos() {
   //   return {};
