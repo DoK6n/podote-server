@@ -37,7 +37,7 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
         logger: (query) => {
           this.logger.verbose(query);
         },
-        format: false,
+        format: true,
         queryDuration: true,
         colorQuery: '\u001B[96m',
         colorParameter: '\u001B[90m',

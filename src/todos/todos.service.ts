@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
-import { Todo } from '@prisma/client';
+import { Prisma, Todo } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateTodoInput } from './dto';
+import { CreateTodoInput, UpdateTodoContentInput } from './dto';
 
 @Injectable()
 export class TodosService {
@@ -32,7 +32,9 @@ export class TodosService {
   async findOneTodoById(id: string, uid: string) {
     return await this.prisma.todo.findFirst({
       where: {
-        AND: [{ id: id }, { userId: uid }, { isRemoved: false }],
+        id: id,
+        userId: uid,
+        isRemoved: false,
       },
     });
   }
@@ -40,7 +42,9 @@ export class TodosService {
   async findOneRemovedTodo(id: string, uid: string) {
     return await this.prisma.todo.findFirst({
       where: {
-        AND: [{ id: id }, { userId: uid }, { isRemoved: true }],
+        id: id,
+        userId: uid,
+        isRemoved: true,
       },
     });
   }
@@ -48,14 +52,27 @@ export class TodosService {
   async findAllRemovedTodos(uid: string) {
     return await this.prisma.todo.findMany({
       where: {
-        AND: [{ userId: uid }, { isRemoved: true }],
+        userId: uid,
+        isRemoved: true,
       },
     });
   }
 
-  // async updateOneTodoById() {
-  //   return {};
-  // }
+  async updateTodoContentById(data: UpdateTodoContentInput) {
+    const { id, uid, content } = data;
+    await this.prisma.todo.updateMany({
+      where: {
+        id: id,
+        userId: uid,
+        isRemoved: false,
+      },
+      data: {
+        content: JSON.parse(JSON.stringify(content)),
+        updatedDt: new Date(),
+      },
+    });
+    return await this.findOneTodoById(id, uid);
+  }
 
   /**
    * $queryRaw와 함께 동적 테이블 이름을 사용할 수 없습니다. 대신 다음과 같이 $queryRawUnsafe를 사용해야 합니다.

@@ -60,6 +60,7 @@ input RetrieveUserInput {
 
 type Mutation {
   addNewTodo(data: CreateTodoInput!): Todo
+  editTodoContent(data: UpdateTodoContentInput!): Todo
   removeTodo(id: String!, uid: String!): Todo
   recycleRemovedTodo(id: String!, uid: String!): Todo
   deleteRemovedTodo(id: String!, uid: String!): Todo
@@ -67,6 +68,12 @@ type Mutation {
 }
 
 input CreateTodoInput {
+  uid: String!
+  content: JSON
+}
+
+input UpdateTodoContentInput {
+  id: String!
   uid: String!
   content: JSON
 }
