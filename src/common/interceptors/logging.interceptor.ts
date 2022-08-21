@@ -14,23 +14,6 @@ export class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger();
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<any> {
-    if (context.getType() === 'http') {
-      const request = context.switchToHttp().getRequest<Request>();
-      const { method, url } = request;
-      const ctx = `${context.getClass().name} ➜ ${context.getHandler().name}()`;
-      const now = Date.now();
-
-      return next.handle().pipe(
-        tap(response => {
-          const ms = `+${Date.now() - now}ms`;
-          this.logger.log(`${method} ${url} \u001B[33m${ms}\u001B[0m`, ctx);
-          this.logger.debug(response, ctx);
-
-          return response;
-        }),
-      );
-    }
-
     if (context.getType<GqlContextType>() === 'graphql') {
       const gqlContext = GqlExecutionContext.create(context);
       const info = gqlContext.getInfo();
@@ -53,6 +36,21 @@ export class LoggingInterceptor implements NestInterceptor {
           if (process.env.NODE_ENV !== 'production') {
             console.dir(response);
           }
+          return response;
+        }),
+      );
+    } else if (context.getType() === 'http') {
+      const request = context.switchToHttp().getRequest<Request>();
+      const { method, url } = request;
+      const ctx = `${context.getClass().name} ➜ ${context.getHandler().name}()`;
+      const now = Date.now();
+
+      return next.handle().pipe(
+        tap(response => {
+          const ms = `+${Date.now() - now}ms`;
+          this.logger.log(`${method} ${url} \u001B[33m${ms}\u001B[0m`, ctx);
+          this.logger.debug(response, ctx);
+
           return response;
         }),
       );
