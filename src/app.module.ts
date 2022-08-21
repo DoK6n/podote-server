@@ -7,6 +7,8 @@ import { PrismaModule } from './prisma/prisma.module';
 import { TodosModule } from './todos/todos.module';
 import { UsersModule } from './users/users.module';
 import { SnsTypeModule } from './sns-type/sns-type.module';
+import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
+import { LoggingInterceptor, HttpExceptionFilter } from './common';
 
 @Module({
   imports: [
@@ -22,6 +24,15 @@ import { SnsTypeModule } from './sns-type/sns-type.module';
     SnsTypeModule,
   ],
   controllers: [],
-  providers: [],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
