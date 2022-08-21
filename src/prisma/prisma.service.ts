@@ -19,7 +19,7 @@ import { createPrismaQueryEventHandler } from 'prisma-query-log';
  */
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit {
-  private readonly logger = new Logger('Query');
+  private readonly logger = new Logger('SQL');
   constructor() {
     super({
       log: [
@@ -34,10 +34,10 @@ export class PrismaService extends PrismaClient implements OnModuleInit {
     this.$on<any>(
       'query',
       createPrismaQueryEventHandler({
-        logger: (query) => {
+        logger: query => {
           this.logger.verbose(query);
         },
-        format: true,
+        format: false,
         queryDuration: true,
         colorQuery: '\u001B[96m',
         colorParameter: '\u001B[90m',
