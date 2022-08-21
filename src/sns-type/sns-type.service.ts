@@ -5,10 +5,18 @@ import { PrismaService } from '../prisma/prisma.service';
 export class SnsTypeService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findOneSNSType(id: number) {
-    return this.prisma.snsType.findUnique({
+  async findOneSNSTypeId(id: number) {
+    return await this.prisma.snsType.findUnique({
       where: {
         id,
+      },
+    });
+  }
+
+  async findOneSNSTypeName(name: string) {
+    return await this.prisma.snsType.findUnique({
+      where: {
+        name,
       },
     });
   }

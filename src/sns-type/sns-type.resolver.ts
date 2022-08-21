@@ -7,7 +7,12 @@ export class SnsTypeResolver {
   constructor(private readonly snsTypeService: SnsTypeService) {}
 
   @Query(() => SnsType, { name: 'snsType' })
-  retrieveSNSType(@Args('id', { type: () => Int }) id: number) {
-    return this.snsTypeService.findOneSNSType(id);
+  retrieveSNSTypeId(@Args('id', { type: () => Int }) id: number) {
+    return this.snsTypeService.findOneSNSTypeId(id);
+  }
+
+  @Query(() => SnsType, { name: 'snsType' })
+  retrieveSNSTypeName(@Args('name', { type: () => String }) name: string) {
+    return this.snsTypeService.findOneSNSTypeName(name);
   }
 }
