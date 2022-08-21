@@ -50,12 +50,8 @@ type Query {
   retrieveRemovedTodo(id: String!, uid: String!): Todo
   retrieveAllRemovedTodo(uid: String!): [Todo!]
   retrieveAllUsers: [User!]
-  retrieveUserById(data: FindUserInput!): UserWithSnsType!
+  retrieveUserById: UserWithSnsType
   snsType(name: String!): SnsType!
-}
-
-input FindUserInput {
-  id: String
 }
 
 type Mutation {
@@ -80,7 +76,6 @@ input UpdateTodoContentInput {
 }
 
 input CreateUserInput {
-  id: String!
   email: String!
   name: String!
   snsTypeName: String!
