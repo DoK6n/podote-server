@@ -50,11 +50,11 @@ type Query {
   retrieveRemovedTodo(id: String!, uid: String!): Todo
   retrieveAllRemovedTodo(uid: String!): [Todo!]
   retrieveAllUsers: [User!]
-  retrieveUserById(data: RetrieveUserInput!): UserWithSnsType!
-  snsType(id: Int!): SnsType!
+  retrieveUserById(data: FindUserInput!): UserWithSnsType!
+  snsType(name: String!): SnsType!
 }
 
-input RetrieveUserInput {
+input FindUserInput {
   id: String
 }
 
@@ -65,6 +65,7 @@ type Mutation {
   recycleRemovedTodo(id: String!, uid: String!): Todo
   deleteRemovedTodo(id: String!, uid: String!): Todo
   deleteAllRemovedTodos(uid: String!): [Todo!]
+  addUser(data: CreateUserInput!): User!
 }
 
 input CreateTodoInput {
@@ -76,4 +77,12 @@ input UpdateTodoContentInput {
   id: String!
   uid: String!
   content: JSON
+}
+
+input CreateUserInput {
+  id: String!
+  email: String!
+  name: String!
+  snsTypeName: String!
+  createDt: DateTime!
 }
