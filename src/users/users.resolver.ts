@@ -1,6 +1,8 @@
-import { Logger } from '@nestjs/common';
+import { Logger, UseGuards } from '@nestjs/common';
 import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { UidGuard } from '../auth';
 import { SnsTypeService } from '../sns-type/sns-type.service';
+import { UserUid } from './decorators';
 import { CreateUserInput, FindUserInput } from './dto';
 import { User, UserWithSnsType } from './models';
 import { UsersService } from './users.service';
@@ -13,9 +15,10 @@ export class UsersResolver {
     private readonly snsTypeService: SnsTypeService,
   ) {}
 
+  @UseGuards(UidGuard)
   @Mutation(() => User)
-  async addUser(@Args('data') data: CreateUserInput) {
-    return this.usersService.createUser(data);
+  async addUser(@UserUid() uid: string, @Args('data') data: CreateUserInput) {
+    return this.usersService.createUser(uid, data);
   }
 
   @Query(() => [User], { nullable: true })
@@ -23,11 +26,18 @@ export class UsersResolver {
     return this.usersService.findAllUsers();
   }
 
-  @Query(() => UserWithSnsType)
-  async retrieveUserById(@Args('data') data: FindUserInput) {
-    const user = await this.usersService.findUserByUid(data);
-    const snsType = await this.snsTypeService.findOneSNSTypeId(user.snsTypeId);
-
-    return { ...user, snsType: snsType.name };
+  @UseGuards(UidGuard)
+  @Query(() => UserWithSnsType, { nullable: true })
+  async retrieveUserById(@UserUid() uid: string) {
+    const user = await this.usersService.findUserByUid(uid);
+    // console.log(user);
+    if (user) {
+      const snsType = await this.snsTypeService.findOneSNSTypeId(
+        user.snsTypeId,
+      );
+      return { ...user, snsType: snsType.name };
+    } else {
+      return null;
+    }
   }
 }
