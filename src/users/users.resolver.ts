@@ -27,17 +27,16 @@ export class UsersResolver {
   }
 
   @UseGuards(UidGuard)
-  @Query(() => UserWithSnsType, { nullable: true })
+  @Query(() => UserWithSnsType)
   async retrieveUserById(@UserUid() uid: string) {
     const user = await this.usersService.findUserByUid(uid);
-    // console.log(user);
     if (user) {
       const snsType = await this.snsTypeService.findOneSNSTypeId(
         user.snsTypeId,
       );
       return { ...user, snsType: snsType.name };
     } else {
-      return null;
+      return {};
     }
   }
 }
