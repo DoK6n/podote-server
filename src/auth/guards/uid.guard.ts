@@ -27,13 +27,12 @@ export class UidGuard implements CanActivate {
   private validateRequest(request: any) {
     const { headers } = request;
     if (headers.uid) {
-      const regexFirebaseUid = /^[0-9a-zA-Z]{28}$/i;
-      const regexUid =
+      const regexUid = /^[A-Za-z0-9_-]{28}$/i;
+      const regexTodoId =
         /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
       const isValidUid = regexUid.test(headers.uid);
-      const isValidFirebaseUid = regexFirebaseUid.test(headers.uid);
 
-      if (isValidUid || isValidFirebaseUid) return true;
+      if (isValidUid) return true;
       else throw new NotFoundException('uid validation fail - wrong pattern');
     } else {
       throw new NotFoundException('not found uid');

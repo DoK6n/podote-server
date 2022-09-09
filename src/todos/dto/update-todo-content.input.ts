@@ -7,9 +7,6 @@ export class UpdateTodoContentInput {
   @Field(() => String)
   id: string;
 
-  @Field(() => String)
-  uid: string;
-
   @Field(() => GraphQLJSON, { nullable: true })
   content: Prisma.JsonValue;
 }

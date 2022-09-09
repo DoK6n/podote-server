@@ -1,17 +1,28 @@
 import { Injectable } from '@nestjs/common';
 import { Prisma, Todo } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
-import { CreateTodoInput, UpdateTodoContentInput } from './dto';
+import {
+  CreateTodoInput,
+  UpdateTodoContentInput,
+  UpdateTodoDoneInput,
+} from './dto';
 
 @Injectable()
 export class TodosService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createNewTodo(data: CreateTodoInput) {
-    const { uid, content } = data;
+  async createNewTodo(uid: string, data: CreateTodoInput) {
+    const { content } = data;
+    const count = await this.prisma.todo.count({
+      where: {
+        userId: uid,
+      },
+    });
+
     return await this.prisma.todo.create({
       data: {
         content: JSON.parse(JSON.stringify(content)),
+        orderKey: count + 1,
         user: {
           connect: {
             id: uid,
@@ -25,6 +36,9 @@ export class TodosService {
     return await this.prisma.todo.findMany({
       where: {
         userId: uid,
+      },
+      orderBy: {
+        orderKey: 'desc',
       },
     });
   }
@@ -58,8 +72,8 @@ export class TodosService {
     });
   }
 
-  async updateTodoContentById(data: UpdateTodoContentInput) {
-    const { id, uid, content } = data;
+  async updateTodoContentById(uid: string, data: UpdateTodoContentInput) {
+    const { id, content } = data;
     await this.prisma.todo.updateMany({
       where: {
         id: id,
@@ -68,6 +82,22 @@ export class TodosService {
       },
       data: {
         content: JSON.parse(JSON.stringify(content)),
+        updatedDt: new Date(),
+      },
+    });
+    return await this.findOneTodoById(id, uid);
+  }
+
+  async updateTodoDoneById(uid: string, data: UpdateTodoDoneInput) {
+    const { id, done } = data;
+    await this.prisma.todo.updateMany({
+      where: {
+        id: id,
+        userId: uid,
+        isRemoved: false,
+      },
+      data: {
+        done: done,
         updatedDt: new Date(),
       },
     });

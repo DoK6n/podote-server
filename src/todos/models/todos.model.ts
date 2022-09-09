@@ -10,12 +10,16 @@ export class Todo {
   @IsString()
   id: string;
 
+  @Field(() => Number)
+  @IsNumber()
+  orderKey: number;
+
   @Field(() => GraphQLJSON, { nullable: true })
   content?: Prisma.JsonValue;
 
   @Field(() => Boolean)
   @IsBoolean()
-  isInactive: boolean;
+  done: boolean;
 
   @Field(() => Boolean)
   @IsBoolean()
