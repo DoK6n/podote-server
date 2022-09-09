@@ -8,7 +8,7 @@ const userData: Prisma.UserCreateInput[] = [
     email: 'Dok6n@email.io',
     snsType: {
       create: {
-        name: 'google',
+        name: 'google.com',
       },
     },
     todos: {
@@ -45,7 +45,7 @@ main()
   .then(async () => {
     await prisma.$disconnect();
   })
-  .catch(async (e) => {
+  .catch(async e => {
     console.error(e);
     await prisma.$disconnect();
     process.exit(1);
