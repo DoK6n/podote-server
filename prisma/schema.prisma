@@ -33,7 +33,7 @@ model SnsType {
 
 model Todo {
   id        String    @id @default(uuid())
-  orderKey  Int       @unique @default(0) @map("order_key")
+  orderKey  Int       @default(0) @map("order_key")
   content   Json?
   done      Boolean   @default(false) @map("done")
   isRemoved Boolean   @default(false) @map("is_removed")
