@@ -59,9 +59,10 @@ type Mutation {
   addNewTodo(data: CreateTodoInput!): Todo
   editTodoContent(data: UpdateTodoContentInput!): Todo
   editTodoDone(data: UpdateTodoDoneInput!): Todo
-  removeTodo(id: String!): Todo
-  recycleRemovedTodo(id: String!): Todo
-  deleteRemovedTodo(id: String!): Todo
+  switchTodoOrder(data: UpdateTodoOrderkeyInput!): [Todo!]!
+  removeTodo(data: TodoIdInput!): Todo
+  recycleRemovedTodo(data: TodoIdInput!): Todo
+  deleteRemovedTodo(data: TodoIdInput!): [Todo!]
   deleteAllRemovedTodos: [Todo!]
   addUser(data: CreateUserInput!): User!
 }
@@ -78,6 +79,19 @@ input UpdateTodoContentInput {
 input UpdateTodoDoneInput {
   id: String!
   done: Boolean!
+}
+
+input UpdateTodoOrderkeyInput {
+  TodoIdOrderKey: [TodoIdOrderKey!]!
+}
+
+input TodoIdOrderKey {
+  id: String!
+  orderKey: Float!
+}
+
+input TodoIdInput {
+  id: String!
 }
 
 input CreateUserInput {

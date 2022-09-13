@@ -3,8 +3,10 @@ import { Prisma, Todo } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import {
   CreateTodoInput,
+  TodoIdInput,
   UpdateTodoContentInput,
   UpdateTodoDoneInput,
+  UpdateTodoOrderkeyInput,
 } from './dto';
 
 @Injectable()
@@ -36,6 +38,7 @@ export class TodosService {
     return await this.prisma.todo.findMany({
       where: {
         userId: uid,
+        isRemoved: false,
       },
       orderBy: {
         orderKey: 'desc',
@@ -68,6 +71,9 @@ export class TodosService {
       where: {
         userId: uid,
         isRemoved: true,
+      },
+      orderBy: {
+        removedDt: 'desc',
       },
     });
   }
@@ -104,6 +110,22 @@ export class TodosService {
     return await this.findOneTodoById(id, uid);
   }
 
+  async updateTodoOrderkeyInput(uid: string, data: UpdateTodoOrderkeyInput) {
+    const { TodoIdOrderKey } = data;
+    let query = Prisma.sql`UPDATE podote_schema.todo as t SET order_key = c.order_key from (values `;
+
+    TodoIdOrderKey.forEach((d, i) => {
+      i < TodoIdOrderKey.length - 1
+        ? (query = Prisma.sql`${query} (${d.id}, ${d.orderKey}, ${uid}), `)
+        : (query = Prisma.sql`${query} (${d.id}, ${d.orderKey}, ${uid}) `);
+    });
+
+    query = Prisma.sql`${query}) as c (id, order_key, user_id) where c.user_id = t.user_id and c.id = t.id`;
+
+    await this.prisma.$queryRaw<Todo[]>(query);
+    return await this.findAllTodosByUser(uid);
+  }
+
   /**
    * $queryRaw와 함께 동적 테이블 이름을 사용할 수 없습니다. 대신 다음과 같이 $queryRawUnsafe를 사용해야 합니다.
    * ```js
@@ -115,21 +137,24 @@ export class TodosService {
     대신 $queryRaw 쿼리를 사용하는 것이 좋습니다. SQL 인젝션 공격에 대한 자세한 내용은 [OWASP SQL 인젝션 가이드](https://owasp.org/www-community/attacks/SQL_Injection)를 참조하세요.
    * 
    */
-  async removeOneTodoById(id: string, uid: string) {
+  async removeOneTodoById(uid: string, data: TodoIdInput) {
+    const { id } = data;
     await this.prisma
       .$queryRaw<Todo>`UPDATE todo SET is_removed = true, removed_dt = now() WHERE id = ${id} AND user_id = ${uid}`;
 
     return await this.findOneRemovedTodo(id, uid);
   }
 
-  async recycleOneRemovedTodoById(id: string, uid: string) {
+  async recycleOneRemovedTodoById(uid: string, data: TodoIdInput) {
+    const { id } = data;
     await this.prisma
       .$queryRaw<Todo>`UPDATE todo SET is_removed = false, removed_dt = null WHERE id = ${id} AND user_id = ${uid}`;
 
     return await this.findOneTodoById(id, uid);
   }
 
-  async deleteOneRemovedTodoById(id: string, uid: string) {
+  async deleteOneRemovedTodoById(uid: string, data: TodoIdInput) {
+    const { id } = data;
     await this.prisma
       .$queryRaw<Todo>`DELETE FROM todo WHERE id = ${id} AND user_id = ${uid} AND is_removed = true`;
     return await this.findAllRemovedTodos(uid);
