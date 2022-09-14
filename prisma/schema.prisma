@@ -36,6 +36,7 @@ model Todo {
   orderKey  Int       @default(0) @map("order_key")
   content   Json?
   done      Boolean   @default(false) @map("done")
+  editable  Boolean   @default(false) @map("editable")
   isRemoved Boolean   @default(false) @map("is_removed")
   user      User      @relation(fields: [userId], references: [id])
   userId    String    @map("user_id")

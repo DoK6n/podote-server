@@ -27,6 +27,7 @@ type Todo {
   orderKey: Float!
   content: JSON
   done: Boolean!
+  editable: Boolean!
   isRemoved: Boolean!
   userId: String!
   createdDt: DateTime!
