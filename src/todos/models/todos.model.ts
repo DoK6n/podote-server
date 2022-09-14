@@ -23,6 +23,10 @@ export class Todo {
 
   @Field(() => Boolean)
   @IsBoolean()
+  editable: boolean;
+
+  @Field(() => Boolean)
+  @IsBoolean()
   isRemoved: boolean;
 
   @Field(() => String)
