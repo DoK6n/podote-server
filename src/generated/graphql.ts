@@ -34,11 +34,12 @@ export type Mutation = {
   addNewTodo?: Maybe<Todo>;
   addUser: User;
   deleteAllRemovedTodos?: Maybe<Array<Todo>>;
-  deleteRemovedTodo?: Maybe<Todo>;
+  deleteRemovedTodo?: Maybe<Array<Todo>>;
   editTodoContent?: Maybe<Todo>;
   editTodoDone?: Maybe<Todo>;
   recycleRemovedTodo?: Maybe<Todo>;
   removeTodo?: Maybe<Todo>;
+  switchTodoOrder: Array<Todo>;
 };
 
 
@@ -53,7 +54,7 @@ export type MutationAddUserArgs = {
 
 
 export type MutationDeleteRemovedTodoArgs = {
-  id: Scalars['String'];
+  data: TodoIdInput;
 };
 
 
@@ -68,12 +69,17 @@ export type MutationEditTodoDoneArgs = {
 
 
 export type MutationRecycleRemovedTodoArgs = {
-  id: Scalars['String'];
+  data: TodoIdInput;
 };
 
 
 export type MutationRemoveTodoArgs = {
-  id: Scalars['String'];
+  data: TodoIdInput;
+};
+
+
+export type MutationSwitchTodoOrderArgs = {
+  data: UpdateTodoOrderkeyInput;
 };
 
 export type Query = {
@@ -113,6 +119,7 @@ export type Todo = {
   content?: Maybe<Scalars['JSON']>;
   createdDt: Scalars['DateTime'];
   done: Scalars['Boolean'];
+  editable: Scalars['Boolean'];
   id: Scalars['String'];
   isRemoved: Scalars['Boolean'];
   orderKey: Scalars['Float'];
@@ -120,6 +127,15 @@ export type Todo = {
   updatedDt?: Maybe<Scalars['DateTime']>;
   user: User;
   userId: Scalars['String'];
+};
+
+export type TodoIdInput = {
+  id: Scalars['String'];
+};
+
+export type TodoIdOrderKey = {
+  id: Scalars['String'];
+  orderKey: Scalars['Float'];
 };
 
 export type UpdateTodoContentInput = {
@@ -130,6 +146,10 @@ export type UpdateTodoContentInput = {
 export type UpdateTodoDoneInput = {
   done: Scalars['Boolean'];
   id: Scalars['String'];
+};
+
+export type UpdateTodoOrderkeyInput = {
+  TodoIdOrderKey: Array<TodoIdOrderKey>;
 };
 
 export type User = {
@@ -230,8 +250,11 @@ export type ResolversTypes = {
   SnsType: ResolverTypeWrapper<SnsType>;
   String: ResolverTypeWrapper<Scalars['String']>;
   Todo: ResolverTypeWrapper<Todo>;
+  TodoIdInput: TodoIdInput;
+  TodoIdOrderKey: TodoIdOrderKey;
   UpdateTodoContentInput: UpdateTodoContentInput;
   UpdateTodoDoneInput: UpdateTodoDoneInput;
+  UpdateTodoOrderkeyInput: UpdateTodoOrderkeyInput;
   User: ResolverTypeWrapper<User>;
   UserWithSnsType: ResolverTypeWrapper<UserWithSnsType>;
 };
@@ -250,8 +273,11 @@ export type ResolversParentTypes = {
   SnsType: SnsType;
   String: Scalars['String'];
   Todo: Todo;
+  TodoIdInput: TodoIdInput;
+  TodoIdOrderKey: TodoIdOrderKey;
   UpdateTodoContentInput: UpdateTodoContentInput;
   UpdateTodoDoneInput: UpdateTodoDoneInput;
+  UpdateTodoOrderkeyInput: UpdateTodoOrderkeyInput;
   User: User;
   UserWithSnsType: UserWithSnsType;
 };
@@ -268,11 +294,12 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addNewTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationAddNewTodoArgs, 'data'>>;
   addUser?: Resolver<ResolversTypes['User'], ParentType, ContextType, RequireFields<MutationAddUserArgs, 'data'>>;
   deleteAllRemovedTodos?: Resolver<Maybe<Array<ResolversTypes['Todo']>>, ParentType, ContextType>;
-  deleteRemovedTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationDeleteRemovedTodoArgs, 'id'>>;
+  deleteRemovedTodo?: Resolver<Maybe<Array<ResolversTypes['Todo']>>, ParentType, ContextType, RequireFields<MutationDeleteRemovedTodoArgs, 'data'>>;
   editTodoContent?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationEditTodoContentArgs, 'data'>>;
   editTodoDone?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationEditTodoDoneArgs, 'data'>>;
-  recycleRemovedTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationRecycleRemovedTodoArgs, 'id'>>;
-  removeTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationRemoveTodoArgs, 'id'>>;
+  recycleRemovedTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationRecycleRemovedTodoArgs, 'data'>>;
+  removeTodo?: Resolver<Maybe<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationRemoveTodoArgs, 'data'>>;
+  switchTodoOrder?: Resolver<Array<ResolversTypes['Todo']>, ParentType, ContextType, RequireFields<MutationSwitchTodoOrderArgs, 'data'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -295,6 +322,7 @@ export type TodoResolvers<ContextType = any, ParentType extends ResolversParentT
   content?: Resolver<Maybe<ResolversTypes['JSON']>, ParentType, ContextType>;
   createdDt?: Resolver<ResolversTypes['DateTime'], ParentType, ContextType>;
   done?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  editable?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   isRemoved?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   orderKey?: Resolver<ResolversTypes['Float'], ParentType, ContextType>;
