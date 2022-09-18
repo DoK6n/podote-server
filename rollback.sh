@@ -8,11 +8,11 @@ if [ -n "$cid" ]; then
     # need rollback [blue]
 
     echo '⬆️  ⬆️  ⬆️  ⬆️  blue server restart ⬆️  ⬆️  ⬆️  ⬆️ '
-    sudo docker-compose -f docker-compose.blue.yml restart nodeblue
+    sudo docker-compose --env-file .env -f docker-compose.blue.yml restart nodeblue
     sleep 0.2
 
     echo '⬇️  ⬇️  ⬇️  ⬇️  green server stop ⬇️  ⬇️  ⬇️  ⬇️ '
-    sudo docker compose -f docker-compose.green.yml stop nodegreen
+    sudo docker-compose -f docker-compose.green.yml stop nodegreen
     sleep 0.2
 
     echo 'blue rollback done! ✅'
@@ -22,11 +22,11 @@ if [ -n "$cid" ]; then
     # need rollback [green]
 
     echo '⬆️  ⬆️  ⬆️  ⬆️  green server restart ⬆️  ⬆️  ⬆️  ⬆️ '
-    sudo docker-compose -f docker-compose.green.yml restart nodegreen
+    sudo docker-compose --env-file .env -f docker-compose.green.yml restart nodegreen
     sleep 0.2
 
     echo'⬇️  ⬇️  ⬇️  ⬇️  blue server stop ⬇️  ⬇️  ⬇️  ⬇️ '
-    sudo docker compose -f docker-compose.blue.yml stop nodeblue
+    sudo docker-compose -f docker-compose.blue.yml stop nodeblue
     sleep 0.2
 
     echo 'green rollback done! ✅'
