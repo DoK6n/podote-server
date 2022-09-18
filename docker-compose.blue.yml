@@ -1,4 +1,5 @@
-version: '3.7'
+version: '3'
+
 podoteblue:
   build:
     context: .
@@ -14,15 +15,4 @@ podoteblue:
       awslogs-stream: apilogs
       awslogs-datetime-format: \%Y-%m-%d %H:%M:%S\]
       tag: '{{.Name}}-{{.ID}}'
-  environment:
-    - PORT=3001
-    - NODE_ENV=production
-    - DATABASE_NAME=postgresql
-    - DATABASE_USER=postgres
-    - DATABASE_PASSWORD=gkgus0115!
-    - DATABASE_HOST=dkdb.cbkpgnxnj0nm.ap-northeast-2.rds.amazonaws.com
-    - DATABASE_PORT=5432
-    - DATABASE_DB=podote
-    - DATABASE_SCHEMA=podote_schema
-    - DATABASE_URL=${DATABASE_NAME}://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_DB}?schema=${DATABASE_SCHEMA}
   restart: unless-stopped
