@@ -8,7 +8,7 @@ if [ -n "$cid" ]; then
     # need rollback [blue]
 
     echo '⬆️  ⬆️  ⬆️  ⬆️  blue server restart ⬆️  ⬆️  ⬆️  ⬆️ '
-    sudo docker-compose --env-file .env -f docker-compose.blue.yml restart nodeblue
+    sudo docker-compose -f docker-compose.blue.yml restart nodeblue
     sleep 0.2
 
     echo '⬇️  ⬇️  ⬇️  ⬇️  green server stop ⬇️  ⬇️  ⬇️  ⬇️ '
@@ -22,7 +22,7 @@ if [ -n "$cid" ]; then
     # need rollback [green]
 
     echo '⬆️  ⬆️  ⬆️  ⬆️  green server restart ⬆️  ⬆️  ⬆️  ⬆️ '
-    sudo docker-compose --env-file .env -f docker-compose.green.yml restart nodegreen
+    sudo docker-compose -f docker-compose.green.yml restart nodegreen
     sleep 0.2
 
     echo'⬇️  ⬇️  ⬇️  ⬇️  blue server stop ⬇️  ⬇️  ⬇️  ⬇️ '

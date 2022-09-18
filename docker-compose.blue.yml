@@ -1,18 +1,21 @@
-version: '3.3'
+version: '3'
 
-nodeblue:
-  build:
-    context: .
-    dockerfile: Dockerfile
-  ports:
-    - '3001:3001'
-  container_name: nodeblue
-  logging:
-    driver: awslogs
-    options:
-      awslogs-region: ap-northeast-2
-      awslogs-group: /aws/ec2/podote-server
-      awslogs-stream: apilogs
-      awslogs-datetime-format: \%Y-%m-%d %H:%M:%S\]
-      tag: '{{.Name}}-{{.ID}}'
-  restart: unless-stopped
+services:
+  nodeblue:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - '3001:3001'
+    container_name: nodeblue
+    logging:
+      driver: awslogs
+      options:
+        awslogs-region: ap-northeast-2
+        awslogs-group: /aws/ec2/podote-server
+        awslogs-stream: apilogs
+        awslogs-datetime-format: \%Y-%m-%d %H:%M:%S\]
+        tag: '{{.Name}}-{{.ID}}'
+    restart: unless-stopped
