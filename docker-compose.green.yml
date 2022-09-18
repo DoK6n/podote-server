@@ -8,7 +8,7 @@ services:
     env_file:
       - .env
     ports:
-      - '3001:3001'
+      - '8001:3001'
     container_name: nodeblue
     logging:
       driver: awslogs
