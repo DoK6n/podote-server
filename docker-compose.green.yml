@@ -1,12 +1,12 @@
 version: '3'
 
-podotegreen:
+nodeblue:
   build:
     context: .
-    dockerfile: Dockerfile.prod
+    dockerfile: Dockerfile
   ports:
     - '3001:3001'
-  container_name: podotegreen
+  container_name: nodeblue
   logging:
     driver: awslogs
     options:
