@@ -12,14 +12,14 @@ if [ -z "$cid" ]; then
   echo 'deploy done! ✅'
   sudo docker ps
 else
-  if sudo docker ps --format '{{.Names}}' | grep -Eq "^nodegreen\$"; then
+  if sudo docker ps --format '{{.Names}}' | grep -Eq "^podotegreen\$"; then
     # if current server [green]
     echo '⬆️  ⬆️  ⬆️  ⬆️  blue server up ⬆️  ⬆️  ⬆️  ⬆️ '
     sudo docker-compose -f docker-compose.blue.yml up -d --build
     sleep 0.2
 
     echo '⬇️  ⬇️  ⬇️  ⬇️  green server stop ⬇️  ⬇️  ⬇️  ⬇️ '
-    sudo docker-compose -f docker-compose.green.yml stop nodegreen
+    sudo docker-compose -f docker-compose.green.yml stop podotegreen
     echo 'deploy done! ✅'
     sudo docker ps -a
   else
@@ -29,7 +29,7 @@ else
     sleep 0.2
 
     echo '⬇️  ⬇️  ⬇️  ⬇️  blue server stop ⬇️  ⬇️  ⬇️  ⬇️ '
-    sudo docker-compose -f docker-compose.blue.yml stop nodeblue
+    sudo docker-compose -f docker-compose.blue.yml stop podoteblue
     echo 'deploy done! ✅'
     sudo docker ps -a
   fi
