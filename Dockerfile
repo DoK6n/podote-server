@@ -24,5 +24,4 @@ COPY --from=builder /usr/src/app/package.json ./package.json
 
 EXPOSE 3001
 
-CMD [ "node", "dist/main.js" ]
-# CMD [ "npm", "run", "start:prod" ]
+CMD [ "npm", "run", "start:prod" ]
