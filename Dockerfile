@@ -1,8 +1,12 @@
-FROM node:16-alpine AS builder
+FROM node:16-slim AS builder
+
+RUN apt-get update
+RUN apt-get install -y openssl
 
 WORKDIR /app
 
-COPY package* ./
+COPY package*.json ./
+COPY prisma ./prisma/
 
 RUN rm -rf node_modules
 RUN npm install --silent
@@ -12,9 +16,12 @@ COPY . .
 RUN npm run build
 
 # remove development dependencies
-RUN npm prune --production
+# RUN npm prune --production
 
-FROM node:16-alpine
+FROM node:16-slim
+
+RUN apt-get update
+RUN apt-get install -y openssl
 
 WORKDIR /app
 
