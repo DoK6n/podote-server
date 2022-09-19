@@ -17,6 +17,7 @@ import { LoggingInterceptor, HttpExceptionFilter } from './common';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       buildSchemaOptions: { dateScalarMode: 'timestamp' },
+      cache: 'bounded', // 사용 가능한 메모리를 고갈시켜 DOS를 유발하는 공격으로부터 서버를 보호합니다
     }),
     PrismaModule,
     TodosModule,
