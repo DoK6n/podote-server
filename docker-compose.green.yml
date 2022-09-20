@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  nodeblue:
+  nodegreen:
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,7 +9,7 @@ services:
       - .env
     ports:
       - '8001:3001'
-    container_name: nodeblue
+    container_name: nodegreen
     logging:
       driver: awslogs
       options:
