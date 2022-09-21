@@ -9,6 +9,7 @@ import { UsersModule } from './users/users.module';
 import { SnsTypeModule } from './sns-type/sns-type.module';
 import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
 import { LoggingInterceptor, HttpExceptionFilter } from './common';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -17,6 +18,10 @@ import { LoggingInterceptor, HttpExceptionFilter } from './common';
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       buildSchemaOptions: { dateScalarMode: 'timestamp' },
+      cors: {
+        origin: 'https://podote.com',
+        credentials: true,
+      },
       introspection: true,
       playground: true,
       cache: 'bounded', // 사용 가능한 메모리를 고갈시켜 DOS를 유발하는 공격으로부터 서버를 보호합니다
@@ -26,7 +31,7 @@ import { LoggingInterceptor, HttpExceptionFilter } from './common';
     UsersModule,
     SnsTypeModule,
   ],
-  controllers: [],
+  controllers: [AppController],
   providers: [
     {
       provide: APP_INTERCEPTOR,
