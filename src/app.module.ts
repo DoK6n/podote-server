@@ -20,7 +20,12 @@ import { AppController } from './app.controller';
       buildSchemaOptions: { dateScalarMode: 'timestamp' },
       cors: {
         origin: 'https://podote.com',
+        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        preflightContinue: false,
+        optionsSuccessStatus: 200,
         credentials: true,
+        allowedHeaders:
+          'Origin,X-Requested-With,Content-Type,Accept,Authorization,authorization,X-Forwarded-for',
       },
       introspection: true,
       playground: true,

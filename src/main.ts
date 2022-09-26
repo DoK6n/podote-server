@@ -16,10 +16,25 @@ async function bootstrap() {
   await prismaService.enableShutdownHooks(app);
 
   const PORT = process.env.PORT || 3000;
+
+  app.enableCors({
+    origin: 'https://podote.com',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 200,
+    credentials: true,
+    allowedHeaders:
+      'Origin,X-Requested-With,Content-Type,Accept,Authorization,authorization,X-Forwarded-for',
+  });
+
   await app.listen(PORT, () => {
     Logger.log(`
 
-              🚀 Podote GraphQL Server ready at: http://localhost:${PORT}
+              🚀 Podote GraphQL Server ready at: ${
+                process.env.NODE_ENV === 'production'
+                  ? 'https://api.podote.click'
+                  : 'http://localhost'
+              }:${PORT}
               ⭐️ front: https://podote.com
 
     `);
