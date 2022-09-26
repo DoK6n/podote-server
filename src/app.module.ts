@@ -19,7 +19,7 @@ import { AppController } from './app.controller';
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       buildSchemaOptions: { dateScalarMode: 'timestamp' },
       cors: {
-        origin: 'https://podote.com',
+        origin: [/^(.*)/],
         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
         preflightContinue: false,
         optionsSuccessStatus: 200,

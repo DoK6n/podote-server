@@ -18,7 +18,7 @@ async function bootstrap() {
   const PORT = process.env.PORT || 3000;
 
   app.enableCors({
-    origin: 'https://podote.com',
+    origin: [/^(.*)/],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     preflightContinue: false,
     optionsSuccessStatus: 200,
@@ -33,8 +33,8 @@ async function bootstrap() {
               🚀 Podote GraphQL Server ready at: ${
                 process.env.NODE_ENV === 'production'
                   ? 'https://api.podote.click'
-                  : 'http://localhost'
-              }:${PORT}
+                  : `http://localhost:${PORT}`
+              }
               ⭐️ front: https://podote.com
 
     `);
