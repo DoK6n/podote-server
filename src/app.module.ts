@@ -24,8 +24,6 @@ import { AppController } from './app.controller';
         preflightContinue: false,
         optionsSuccessStatus: 200,
         credentials: true,
-        allowedHeaders:
-          'Origin,X-Requested-With,Content-Type,Accept,Authorization,authorization,X-Forwarded-for',
       },
       introspection: true,
       playground: true,
